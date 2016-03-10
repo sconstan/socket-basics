@@ -7,7 +7,6 @@ var now = moment();
 // console.log(now.valueOf());
 
 var timestamp = console.log(now.valueOf());
-
 var timestampMoment = moment.utc(timestamp);
 
 console.log(timestampMoment.local().format('h:mm a'));
