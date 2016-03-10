@@ -11,11 +11,12 @@ var clientInfo = {};
 
 // Sends current users to provided socket
 function sendCurrentUsers (socket) {
+
 	var info = clientInfo[socket.id];
 	var users = [];
 
 	if (typeof info === 'undefined') {
-		reutrn;
+		return ('');
 	}
 
 	Object.keys(clientInfo).forEach( function (socketId) {
@@ -31,6 +32,8 @@ function sendCurrentUsers (socket) {
 			timestamp: moment().valueOf()
 		});
 	});
+
+	return (users.join(', '));
 }
 
 io.on('connection', function (socket) {
@@ -47,6 +50,16 @@ io.on('connection', function (socket) {
 				timestamp: moment().valueOf()
 			});
 			delete clientInfo[socket.id];
+
+// send special message with list of users
+			// var users = sendCurrentUsers(socket);
+			// console.log(users);
+
+			// socket.emit('userlist', {
+			// 	name: 'System',
+			// 	text: users,
+			// 	timestamp: moment().valueOf()
+			// });
 		}
 	});
 
@@ -58,6 +71,16 @@ io.on('connection', function (socket) {
 			text: req.name + ' has joined!',
 			timestamp: moment().valueOf()
 		});
+
+// send special message with list of users
+		var users = sendCurrentUsers(socket);
+		// console.log(users);
+
+		socket.emit('userlist', {
+			name: 'System',
+			text: users,
+			timestamp: moment().valueOf()
+		});
 	});
 
 	socket.on('message', function (message) {
@@ -65,7 +88,6 @@ io.on('connection', function (socket) {
 
 		if (message.text === '@currentusers') {
 			sendCurrentUsers(socket);
-
 
 		} else {
 			message.timestamp = moment().valueOf();

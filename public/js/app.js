@@ -17,6 +17,14 @@ socket.on('connect', function () {
 
 });
 
+socket.on('userlist', function (message) {
+
+	console.log('received new list of users....');
+	console.log(message.text);
+
+	$(".connected-users").text(message.text);
+});
+
 socket.on('message', function (message) {
 	var momentTimestamp = moment.utc(message.timestamp);
 	var $messages = jQuery('.messages');
@@ -27,9 +35,7 @@ socket.on('message', function (message) {
 
 	$message.append('<p><strong>' + message.name + ' said at ' + momentTimestamp.local().format('h:mm:ss a') + '</strong></p>');
 	$message.append('<p>' + message.text + '</p>');
-
 	$messages.append($message);
-
 });
 
 // Handles submitting of new message
