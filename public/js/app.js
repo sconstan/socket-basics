@@ -6,7 +6,7 @@ console.log(name + ' wants to join ' + room);
 
 
 // update H1 tag 
-$(".room-title").text(room);
+$(".room-title").text(name + ' in room ' + room);
 
 socket.on('connect', function () {
 	console.log('Connected to socket.io server!');
